@@ -2,13 +2,14 @@ import uvicorn
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database.session import create_db_and_tables, engine
+from .database.session import async_engine
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await create_db_and_tables()
+    print("🚀 HabitFlow API service waking up...")
     yield
-    await engine.dispose()
+    await async_engine.dispose()
+    print("🛑 Database engine connection pool safely dissolved.")
 
 
 

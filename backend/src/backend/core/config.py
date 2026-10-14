@@ -36,6 +36,7 @@ class Settings(BaseSettings):
     def ASYNC_DB_URI(self) -> str:
         return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
+
     model_config = SettingsConfigDict(
         env_file = PROJECT_ROOT / ".env",
         env_file_encoding = "utf-8",
@@ -44,6 +45,7 @@ class Settings(BaseSettings):
 
 @lru_cache
 def get_settings():
+
     return Settings()
 
 settings = get_settings()
