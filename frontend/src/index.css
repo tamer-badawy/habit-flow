@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+/* Define custom theme color for HabitFlow */
+@theme {
+  --color-brand-dark: #090d16;
+  --color-brand-bg: #0f172a;
+  --color-brand-card: #1e293b;
+}
+
+/* Set global theme configuration across app */
+@layer base{
+  body{
+    @apply bg-brand-bg text-slate-100 font-sans antialiased m-0
+  }
+}
