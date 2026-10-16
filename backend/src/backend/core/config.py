@@ -20,7 +20,8 @@ class Settings(BaseSettings):
     # Should be changed  in production (ex: openssl rand -hex 32)
     SECRET_KEY: str = "DEFAULT_INSECURE_FALLBACK_SECRET_KEY_CHANGE_ME_IN_PRODUCTION"
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7 # valid for 7 days
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15 # valid for 15 min
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 7 #valid for 7 days
 
     #----------------------------------------------------------------------------------------------------
     # Database Connection Settings

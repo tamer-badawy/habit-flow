@@ -4,6 +4,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.database.session import async_engine
 from backend.routers import auth
+from backend.routers import habit
+
+from backend.models.user import User, User_Refresh_Token
+from backend.models.habit import Habit
+from backend.models.log import Log
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -30,6 +36,7 @@ app.add_middleware (
 )
 
 app.include_router(auth.router)
+app.include_router(habit.router)
 
 
 

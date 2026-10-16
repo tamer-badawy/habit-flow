@@ -1,7 +1,11 @@
 from sqlmodel import SQLModel, Field, Relationship
-from pydantic import EmailStr
-from typing import List
+from sqlalchemy import String, Column
+from pydantic import EmailStr, SecretStr, model_validator, BaseModel
+from typing import List, TYPE_CHECKING, Self
 from datetime import datetime, timezone
+
+if TYPE_CHECKING:
+    from backend.models.habit import Habit
 
 class BaseUser(SQLModel):
     id: int|None = Field(default= None, index= True, primary_key= True)
@@ -10,16 +14,27 @@ class BaseUser(SQLModel):
     last_name: str = Field(max_length= 30, nullable= False)
     is_active: bool = Field(default= True)
 
-class User_Register(SQLModel):
+class UserRegister(BaseModel):
     email: EmailStr = Field(unique= True, index= True, nullable= False)
-    password: str = Field(min_length=6, nullable= False)
+    password: SecretStr = Field(min_length=6, nullable= False)
+    password_confirm: SecretStr = Field(min_length=6 , nullable= False)
     first_name: str = Field(max_length= 30, nullable= False)
     last_name: str = Field(max_length= 30, nullable= False)
+
+    @model_validator(mode= "after")
+    def passwords_match(self)-> Self:
+        password = self.password.get_secret_value()
+        password_confirm = self.password_confirm.get_secret_value()
+        if password != password_confirm:
+            raise ValueError("Passwords do not match")
+        return self
+    
+
 
 
 class User(BaseUser, table = True):
     __tablename__ = "users"
-    password: str = Field(nullable= False)
+    password: SecretStr = Field(sa_column= Column(String(255), nullable= False))
     habits: List["Habit"] = Relationship(back_populates= "user", cascade_delete= True)
     refresh_tokens: List[User_Refresh_Token] = Relationship(back_populates= "user", cascade_delete= True)
 

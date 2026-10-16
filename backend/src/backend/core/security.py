@@ -12,7 +12,7 @@ from fastapi import Depends, HTTPException, status
 
 _password_hash = PasswordHash.recommended()
 
-_auth_scheme = OAuth2PasswordBearer("token")
+_auth_scheme = OAuth2PasswordBearer("/api/auth/login")
 
 def get_password_hash(password: str)-> str:
     return _password_hash.hash(password)
@@ -22,7 +22,7 @@ def verify_password(password, hash : str)-> bool:
 
 
 def create_access_token(subject: int| str)->str:
-    expires = datetime.now(timezone.utc) + timedelta(minutes= 15)
+    expires = datetime.now(timezone.utc) + timedelta(minutes= settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode = {"exp": expires, "sub": str(subject), "type": "access"}
 
     return jwt.encode(to_encode, settings.SECRET_KEY, settings.ALGORITHM)
@@ -50,6 +50,7 @@ async def get_user(token: Annotated[str, Depends(_auth_scheme)])-> BaseUser:
 def generate_random_refresh_token():
     return secrets.token_hex(32)
 
+AuthUser = Annotated[BaseUser, Depends(get_user)]
 
 
 
