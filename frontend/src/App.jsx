@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthProvider, AuthContext } from "./context/AuthContext";
+import Login from "./components/Login";
+import Register from "./components/Register";
 import HabitCard from "./components/HabitCard";
 import HabitModal from "./components/HabitModal";
+import { RouterProvider } from "react-router";
+import { router } from "./router";
 
-export default function App() {
+function DashboardShell() {
+  const { user, logout } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   // Simulating an active state fetched from an API
   const [habits, setHabits] = useState([
@@ -187,5 +193,45 @@ export default function App() {
         onAddHabit={handleAddHabit}
       />
     </div>
+  );
+}
+
+function AuthRouter() {
+  const { user, loading } = useContext(AuthContext);
+  const [isLoginScreen, setIsLoginScreen] = useState(true); // 'login' or 'register'
+
+  // 1. App Startup Guard: Displays full-screen loading spinner while verifying HttpOnly cookies
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-brand-bg flex items-center justify-center">
+        <div className="h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  // 2. Unauthenticated Gate: Show Login or Register screens if state user is null
+  if (!user) {
+    return (
+      <div className="relative  min-h-screen w-full max-w-md mt-12  mx-auto overflow-hidden bg-brand-bg  ">
+        <div
+          className={`flex w-[200%] max-w-4xl h-full transition-transform ${isLoginScreen ? "translate-x-0" : "-translate-x-1/2"} duration-500 ease-in-out`}
+        >
+          <Login onSwitchToRegister={() => setIsLoginScreen(false)} />
+
+          <Register onSwitchToLogin={() => setIsLoginScreen(true)} />
+        </div>
+      </div>
+    );
+  }
+
+  // 3. Authenticated Gate: Serve the secure workspace dashboard dashboard shell
+  return <DashboardShell />;
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   );
 }

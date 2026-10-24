@@ -60,6 +60,20 @@ async def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     )
     return TokenResponse(access_token= access_token)
 
+@router.post("/logout")
+async def logout(db: SessionDep, refresh_token: str = Cookie(None)):
+    if not refresh_token:
+        raise HTTPException(status_code= status.HTTP_401_UNAUTHORIZED, detail= "Session expired or missing cookie")
+
+    statement =  select(User_Refresh_Token).where(User_Refresh_Token.token == refresh_token)
+    token_row = (await db.exec(statement)).first()
+    if not token_row:
+        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail= "Session expired, please log in again")
+    await db.delete(token_row)
+    await db.commit()
+
+    return {"status": "success", "message": "Account logged out successfully"}
+
 
 @router.post("/refresh", response_model= TokenResponse)
 async def refresh_access_token(response: Response, db: SessionDep, refresh_token: str = Cookie(None))-> TokenResponse:
