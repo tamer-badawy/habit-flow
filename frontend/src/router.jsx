@@ -27,6 +27,7 @@ export const router = createBrowserRouter([
     children: [
       {
         element: <DashboardLayout />,
+        ErrorBoundary: RootErrorBoundary,
         children: [
           {
             path: "/dashboard",

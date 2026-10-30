@@ -1,13 +1,16 @@
 import { useState } from "react";
 import HabitCard from "../components/HabitCard";
+import NumPadModel from "../components/NumPadModal";
 
 export default function Dashboard() {
+  const [isNumPadModalOpen, setIsNumPadModalOpen] = useState(false);
+  const [currentHabit, setCurrentHabit] = useState(null);
   const [habits, setHabits] = useState([
     {
       id: 1,
       name: "Morning Exercise",
       category: "Health",
-      icon: "🏃‍♂️",
+      isNumeric: false,
       streak: 17,
       isCompletedToday: false,
     },
@@ -15,7 +18,10 @@ export default function Dashboard() {
       id: 2,
       name: "Read 20 Pages",
       category: "Mind",
-      icon: "📚",
+      isNumeric: true,
+      currentValue: 8,
+      targetValue: 20,
+      unit: "pages",
       streak: 4,
       isCompletedToday: false,
     },
@@ -23,7 +29,10 @@ export default function Dashboard() {
       id: 3,
       name: "Drink 8 Glasses of Water",
       category: "Health",
-      icon: "💧",
+      isNumeric: true,
+      currentValue: 8,
+      targetValue: 8,
+      unit: "glasses",
       streak: 22,
       isCompletedToday: true,
     },
@@ -31,7 +40,7 @@ export default function Dashboard() {
       id: 4,
       name: "Meditation",
       category: "Mind",
-      icon: "🧘‍♂️",
+      isNumeric: false,
       streak: 0,
       isCompletedToday: false,
     },
@@ -55,6 +64,31 @@ export default function Dashboard() {
     );
   };
 
+  const handleLogProgress = (value) => {
+    console.log(value);
+
+    /*setHabits(
+      habits.map((habit) => {
+        if (habit.id === id && habit.isNumeric) {
+          const nextValue = habit.currentValue + 1;
+          const reachedGoal = nextValue === habit.targetValue;
+          return {
+            ...habit,
+            currentValue: nextValue,
+            // Increment streak only at the exact moment they hit their numeric target threshold
+            streak: reachedGoal ? habit.streak + 1 : habit.streak,
+          };
+        }
+        return habit;
+      }),
+    );*/
+  };
+
+  const handleToggleLogProgress = (habit) => {
+    setCurrentHabit(habit);
+    setIsNumPadModalOpen(true);
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
       {/* Main Habits Container */}
@@ -62,9 +96,14 @@ export default function Dashboard() {
         <h2 className="text-lg font-bold text-slate-300 mb-2">
           Today's Habits
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {habits.map((habit) => (
-            <HabitCard key={habit.id} habit={habit} onToggle={toggleHabit} />
+            <HabitCard
+              key={habit.id}
+              habit={habit}
+              onToggle={toggleHabit}
+              onToggleLogProgress={() => handleToggleLogProgress(habit)}
+            />
           ))}
         </div>
       </div>
@@ -89,6 +128,12 @@ export default function Dashboard() {
           </p>
         </div>
       </div>
+      <NumPadModel
+        isOpen={isNumPadModalOpen}
+        onClose={() => setIsNumPadModalOpen(false)}
+        habit={currentHabit}
+        onLogProgress={handleLogProgress}
+      />
     </div>
   );
 }

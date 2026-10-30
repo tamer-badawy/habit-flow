@@ -7,6 +7,7 @@ import {
   ChartNetworkIcon,
   SettingsIcon,
   LogOutIcon,
+  PlusIcon,
 } from "lucide-react";
 import { useOutsideClick } from "../utils/useOutsideClick";
 import logo from "../assets/logo.png";
@@ -40,7 +41,6 @@ export default function DashboardLayout() {
   };
 
   useEffect(() => {
-    console.log(window.innerWidth);
     setIsOpenSidebar(window.innerWidth >= 768);
   }, []);
 
@@ -122,7 +122,7 @@ export default function DashboardLayout() {
       <div className="col-start-2 max-md:col-start-1 max-md:col-span-2 row-start-2 flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <header className="flex justify-between items-center mb-8 p-6 md:p-10">
           <div>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-xl md:text-3xl font-extrabold text-white tracking-tight">
               Welcome back, Alex!
             </h1>
             <p className="text-slate-400 mt-1">
@@ -131,9 +131,9 @@ export default function DashboardLayout() {
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg shadow-blue-900/30 transition-all flex items-center gap-2"
+            className="bg-blue-600 hover:bg-blue-500 text-sm md:text-xl text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg shadow-blue-900/30 transition-all flex items-center gap-2"
           >
-            <span>+</span> Add New Habit
+            <PlusIcon /> Add New Habit
           </button>
         </header>
 
