@@ -86,7 +86,7 @@ export default function HabitCard({ habit, onToggle, onToggleLogProgress }) {
       <div className="w-full bg-slate-700 h-2 rounded-full mb-6 overflow-hidden">
         <div
           className={`h-full transition-all duration-500 ${habit.isCompletedToday ? "bg-emerald-400" : "bg-blue-400"}`}
-          style={{ width: progressPercentage }}
+          style={{ width: progressPercentage + "%" }}
         ></div>
       </div>
       {/* ============================================================
@@ -116,16 +116,24 @@ export default function HabitCard({ habit, onToggle, onToggleLogProgress }) {
         </div>
       ) : (
         /* STYLE B: STANDARD BINARY TRUE/FALSE CHECKBOX TOGGLE CONTAINER */
-        <button
-          onClick={() => onToggle(habit.id)}
-          className={`w-full py-2.5 rounded-xl font-bold tracking-wide transition-all duration-200 text-sm cursor-pointer ${
-            isCompleted
-              ? "bg-emerald-500 text-white hover:bg-emerald-600 shadow-md shadow-emerald-950/20"
-              : "bg-slate-700 text-slate-200 hover:bg-slate-600"
-          }`}
-        >
-          {isCompleted ? "✓ Done For Today!" : "Mark Completed"}
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => onToggle(habit.id)}
+            className={`flex-1 py-2.5 rounded-xl font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer ${
+              isCompleted
+                ? "bg-emerald-500 text-white hover:bg-emerald-600 shadow-md shadow-emerald-950/20"
+                : "bg-slate-700 text-slate-200 hover:bg-slate-600"
+            }`}
+          >
+            {isCompleted ? (
+              <>
+                <CheckCircle2 size={16} /> Done For Today!
+              </>
+            ) : (
+              "Mark Completed"
+            )}
+          </button>
+        </div>
       )}
     </div>
   );
