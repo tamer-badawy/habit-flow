@@ -24,6 +24,9 @@ class Habit(SQLModel, table = True):
     category: CategoriesEnum = Field(max_length= 50, nullable= False)
     streak : int = Field(default= 0, nullable= False)
     created_at: datetime = Field(default_factory= lambda: datetime.now(timezone.utc))
+    is_numeric: bool = Field(default= False)
+    target_value: int = Field(default= 1)
+    unit: str|None = Field(default= None)
 
     user: "User" = Relationship(back_populates= "habits")
     logs: List["Log"] = Relationship(back_populates= "habit", cascade_delete= True)

@@ -11,6 +11,7 @@ class Log(SQLModel, table = True):
     id: int|None = Field(default= None, primary_key= True, index= True)
     habit_id: int = Field(foreign_key= "habits.id", ondelete= "CASCADE", nullable= False)
     completed_at: datetime = Field(default_factory= lambda: datetime.now(timezone.utc), index= True)
+    value_logged: int = Field(default= 1, nullable= False)
 
     habit: "Habit" = Relationship(back_populates= "logs")
 
