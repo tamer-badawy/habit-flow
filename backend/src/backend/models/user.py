@@ -1,11 +1,27 @@
 from sqlmodel import SQLModel, Field, Relationship
 from sqlalchemy import String, Column
+from sqlalchemy.types import TypeDecorator
 from pydantic import EmailStr, SecretStr, model_validator, BaseModel
 from typing import List, TYPE_CHECKING, Self
 from datetime import datetime, timezone
 
 if TYPE_CHECKING:
     from backend.models.habit import Habit
+
+class SecretStrType(TypeDecorator):
+    impl = String(255)
+    cache_ok = True
+
+    def process_bind_param(self, value, dialect):
+        if isinstance(value, SecretStr):
+            return value.get_secret_value()
+        return value
+
+    def process_result_value(self, value, dialect):
+        if value is not None:
+            return SecretStr(value)
+        return value
+
 
 class BaseUser(SQLModel):
     id: int|None = Field(default= None, index= True, primary_key= True)
@@ -34,7 +50,7 @@ class UserRegister(BaseModel):
 
 class User(BaseUser, table = True):
     __tablename__ = "users"
-    password: SecretStr = Field(sa_column= Column(String(255), nullable= False))
+    password: SecretStr = Field(sa_column= Column(SecretStrType, nullable= False))
     habits: List["Habit"] = Relationship(back_populates= "user", cascade_delete= True)
     refresh_tokens: List[User_Refresh_Token] = Relationship(back_populates= "user", cascade_delete= True)
 
