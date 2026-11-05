@@ -49,7 +49,7 @@ async def validation_exception_handler(request, exc: RequestValidationError):
         "string_too_long": "{loc} should be at most {max_length} in length",
     }
     for error in exc.errors():
-        formats = dict()
+        formats = {}
         if error["type"] != "value_error":
             loc = error["loc"][1] if error["loc"][0] in ("body", "path", "query") else error["loc"][0]
             formats = {"loc": loc.replace("_", " ").title()}

@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, useEffect, createContext } from "react";
 import { jwtDecode } from "jwt-decode";
 import api from "../services/api";
 
@@ -16,6 +16,16 @@ export const AuthProvider = ({ children }) => {
       id: decodedToken.sub,
     });
   };
+
+  useEffect(() => {
+    const handleForceLogout = () => {
+      setToken(null);
+      setUser(null);
+    };
+    window.addEventListener("force-logout", handleForceLogout);
+    return () => window.removeEventListener("force-logout", handleForceLogout);
+  }, []);
+
   useEffect(() => {
     async function checkAuth() {
       try {
@@ -29,15 +39,6 @@ export const AuthProvider = ({ children }) => {
       }
     }
     checkAuth();
-  }, []);
-
-  useEffect(() => {
-    const handleForceLogout = () => {
-      setToken(null);
-      setUser(null);
-    };
-    window.addEventListener("force-logout", handleForceLogout);
-    return () => window.removeEventListener("force-logout", handleForceLogout);
   }, []);
 
   const login = async (email, password) => {

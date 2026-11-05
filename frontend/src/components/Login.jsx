@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Mail, Lock, LogIn } from "lucide-react";
 import { useNavigate } from "react-router";
+import logo from "../assets/logo.png";
 
 export default function Login({ onSwitchToRegister }) {
   const { user, loading, login } = useContext(AuthContext);
@@ -35,8 +36,8 @@ export default function Login({ onSwitchToRegister }) {
     <div className=" w-1/2  bg-brand-dark border border-slate-800/80 p-8 rounded-2xl shadow-2xl  overflow-hidden animate-in fade-in zoom-in-95 duration-700">
       {/* Visual Identity Logo */}
       <div className="flex flex-col items-center mb-8">
-        <div className="h-12 w-12 bg-blue-600 rounded-2xl flex items-center justify-center font-bold text-white shadow-lg shadow-blue-900/30 text-2xl mb-3">
-          ⚡
+        <div className="h-12 w-12 rounded-2xl border border-slate-700 flex items-center justify-center font-bold shadow-lg shadow-blue-900/30 text-2xl mb-3">
+          <img src={logo} className="h-10 w-auto" />
         </div>
         <h2 className="text-2xl font-black text-white tracking-tight flex items-center gap-1.5">
           Welcome back to{" "}

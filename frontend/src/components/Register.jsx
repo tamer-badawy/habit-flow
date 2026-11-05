@@ -8,6 +8,7 @@ import {
   UserRound,
   SquareExclamationPoint,
 } from "lucide-react";
+import logo from "../assets/logo.png";
 
 export default function Register({ onSwitchToLogin }) {
   const [email, setEmail] = useState("");
@@ -60,9 +61,10 @@ export default function Register({ onSwitchToLogin }) {
 
   if (success) {
     return (
-      <div className="w-1/2 max-w-md bg-brand-dark border border-slate-800 p-8 rounded-2xl shadow-2xl text-center animate-in fade-in zoom-in-95 duration-200">
-        {" "}
-        <div className="h-12 w-12 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center font-bold mx-auto mb-4 text-2xl"></div>
+      <div className="w-1/2 max-w-md flex items-center justify-center flex-col bg-brand-dark border border-slate-800 p-8 rounded-2xl shadow-2xl text-center animate-in fade-in zoom-in-95 duration-200">
+        <div className="h-12 w-12 rounded-2xl border border-slate-700 flex items-center justify-center font-bold shadow-lg shadow-blue-900/30 text-2xl mb-3">
+          <img src={logo} className="h-10 w-auto" />
+        </div>
         <h2 className="text-2xl font-bold text-white tracking-tight">
           Account Created!
         </h2>
@@ -83,6 +85,9 @@ export default function Register({ onSwitchToLogin }) {
   return (
     <div className="w-1/2 bg-brand-dark border border-slate-800/80 p-8 rounded-2xl shadow-2xl  overflow-hidden animate-in fade-in zoom-in-95 duration-700">
       <div className="flex flex-col items-center mb-8">
+        <div className="h-12 w-12 rounded-2xl border border-slate-700 flex items-center justify-center font-bold shadow-lg shadow-blue-900/30 text-2xl mb-3">
+          <img src={logo} className="h-10 w-auto" />
+        </div>
         <h2 className="text-2xl font-black text-white tracking-tight">
           Join{" "}
           <span className="bg-linear-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
