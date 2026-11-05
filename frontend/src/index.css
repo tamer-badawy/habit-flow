@@ -5,11 +5,24 @@
   --color-brand-dark: #090d16;
   --color-brand-bg: #0f172a;
   --color-brand-card: #1e293b;
+
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  --animate-slide-down: slide-down 0.6s ease-out forwards;
 }
 
 /* Set global theme configuration across app */
-@layer base{
-  body{
-    @apply bg-brand-bg text-slate-100 font-sans antialiased m-0
+@layer base {
+  body {
+    @apply bg-brand-bg text-slate-100 font-sans antialiased m-0;
   }
 }

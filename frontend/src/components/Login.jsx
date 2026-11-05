@@ -51,8 +51,8 @@ export default function Login({ onSwitchToRegister }) {
       </div>
       {/* Error Callout Panel */}
       {error && (
-        <div className="mb-5 p-3.5 bg-rose-950/40 border border-rose-500/30 rounded-xl text-xs font-semibold text-rose-400 animate-shake">
-          ⚠️ {error}
+        <div className="mb-5 p-3.5 bg-rose-950/40 border border-rose-500/30 rounded-xl text-xs font-semibold text-rose-400 animate-slide-down">
+          {error}
         </div>
       )}
       <form onSubmit={handleSubmit} className="space-y-5">

@@ -43,7 +43,7 @@ export default function Register({ onSwitchToLogin }) {
     } catch (err) {
       if (err.response) {
         let msg = [];
-        if (typeof err.response.data?.detail == "array") {
+        if (Array.isArray(err.response.data?.detail)) {
           err.response.data?.detail.forEach((item) => {
             msg.push(item.msg);
           });
@@ -99,12 +99,11 @@ export default function Register({ onSwitchToLogin }) {
         </p>
       </div>
       {error.length > 0 && (
-        <div className="mb-5 p-3.5 bg-rose-950/40 border border-rose-500/30 rounded-xl text-xs font-semibold text-rose-400 animate-shake">
+        <div className="mb-5 p-3.5 bg-rose-950/40 border border-rose-500/30 rounded-xl text-xs font-semibold text-rose-400 animate-slide-down">
           <ul className="list-none pl-0 space-y-2">
             {error.map((e, i) => (
               <li className="flex flex-row items-start gap-2" key={i}>
-                <SquareExclamationPoint className="shrink-0" size={16} />{" "}
-                <span>{e}</span>
+                {e}
               </li>
             ))}
           </ul>
