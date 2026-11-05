@@ -32,8 +32,8 @@ class BaseUser(SQLModel):
 
 class UserRegister(BaseModel):
     email: EmailStr = Field(unique= True, index= True, nullable= False)
-    password: SecretStr = Field(min_length=6, nullable= False)
-    password_confirm: SecretStr = Field(min_length=6 , nullable= False)
+    password: SecretStr = Field(min_length=8, nullable= False)
+    password_confirm: SecretStr = Field(min_length=8 , nullable= False)
     first_name: str = Field(max_length= 30, nullable= False)
     last_name: str = Field(max_length= 30, nullable= False)
 

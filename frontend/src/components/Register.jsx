@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import api from "../services/api";
-import {
-  Mail,
-  Lock,
-  UserRoundPlus,
-  ArrowLeft,
-  UserRound,
-  SquareExclamationPoint,
-} from "lucide-react";
+import { Mail, Lock, UserRoundPlus, ArrowLeft, UserRound } from "lucide-react";
 import logo from "../assets/logo.png";
 
 export default function Register({ onSwitchToLogin }) {
@@ -125,7 +118,7 @@ export default function Register({ onSwitchToLogin }) {
                 placeholder="John"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-brand-card border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
+                className="w-full pl-11 pr-4 py-3 bg-brand-card border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none  transition-all text-sm font-medium"
                 required
               />
             </div>
@@ -140,7 +133,7 @@ export default function Register({ onSwitchToLogin }) {
                 placeholder="Smith"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-brand-card border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
+                className="w-full pl-11 pr-4 py-3 bg-brand-card border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none  transition-all text-sm font-medium"
                 required
               />
             </div>
@@ -160,7 +153,7 @@ export default function Register({ onSwitchToLogin }) {
               placeholder="alex@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-brand-card border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
+              className="w-full pl-11 pr-4 py-3 bg-brand-card border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none  transition-all text-sm font-medium"
               required
             />
           </div>
@@ -175,13 +168,14 @@ export default function Register({ onSwitchToLogin }) {
                 className="absolute left-3.5 top-3.5 text-slate-500"
                 size={18}
               />
+
               <input
                 type="password"
                 placeholder="••••••••"
                 value={password}
-                minLength={6}
+                minLength={8}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-brand-card border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
+                className="w-full pl-11 pr-4 py-3  bg-brand-card border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none transition-all text-sm font-medium"
                 required
               />
             </div>
@@ -200,9 +194,9 @@ export default function Register({ onSwitchToLogin }) {
                 type="password"
                 placeholder="••••••••"
                 value={confirmPassword}
-                minLength={6}
+                minLength={8}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-brand-card border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
+                className="w-full pl-11 pr-4 py-3 bg-brand-card border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none transition-all text-sm font-medium"
                 required
               />
             </div>
