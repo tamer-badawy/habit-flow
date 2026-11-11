@@ -21,13 +21,13 @@ def verify_password(password, hash : str)-> bool:
     return _password_hash.verify(password, hash)
 
 
-def create_access_token(subject: int| str)->str:
+def create_access_token(subject: int| str, kwrds: dict)->str:
     expires = datetime.now(timezone.utc) + timedelta(minutes= settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode = {"exp": expires, "sub": str(subject), "type": "access"}
+    to_encode = {"exp": expires, "sub": str(subject), "type": "access", **kwrds}
 
     return jwt.encode(to_encode, settings.SECRET_KEY, settings.ALGORITHM)
 
-async def get_user(token: Annotated[str, Depends(_auth_scheme)])-> BaseUser:
+async def get_user(token: Annotated[str, Depends(_auth_scheme)], db: SessionDep)-> BaseUser:
     credential_exception = HTTPException(status.HTTP_401_UNAUTHORIZED,
                                          detail= "Could not validate credentials",
                                          headers={"WWW-Authenticate": "Bearer"},
@@ -38,12 +38,12 @@ async def get_user(token: Annotated[str, Depends(_auth_scheme)])-> BaseUser:
         if user_id is None:
             raise credential_exception
         
-        user = SessionDep.get(User,user_id)
+        user = await db.get(User,int(user_id))
         if user is None:
             raise credential_exception
         if not user.is_active:
             raise HTTPException(status.HTTP_400_BAD_REQUEST, detail= "Inactive user")
-        return BaseUser(user)
+        return user
     except InvalidTokenError:
         raise credential_exception
 

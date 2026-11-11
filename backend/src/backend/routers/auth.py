@@ -2,6 +2,7 @@ from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, HTTPException, status, Response, Cookie, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import select
+from sqlalchemy.orm import selectinload
 from pydantic import BaseModel
 from backend.models.user import User, UserRegister, User_Refresh_Token
 from backend.core.config import settings
@@ -40,7 +41,7 @@ async def login_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     if not user or not verify_password(form_data.password, user.password.get_secret_value()):
         raise HTTPException(status_code= status.HTTP_401_UNAUTHORIZED, detail= "Invalid credentails")
 
-    access_token = create_access_token(user.id)
+    access_token = create_access_token(user.id, {"firstName": user.first_name, "lastName": user.last_name})
 
     random_refresh_token = generate_random_refresh_token()
     expiry_time = datetime.now(timezone.utc) + timedelta(days = settings.REFRESH_TOKEN_EXPIRE_DAYS)
@@ -80,7 +81,7 @@ async def refresh_access_token(response: Response, db: SessionDep, refresh_token
     if not refresh_token:
         raise HTTPException(status_code= status.HTTP_401_UNAUTHORIZED, detail= "Session expired or missing cookie")
 
-    statement = select(User_Refresh_Token).where(User_Refresh_Token.token == refresh_token)
+    statement = select(User_Refresh_Token).where(User_Refresh_Token.token == refresh_token).options(selectinload(User_Refresh_Token.user))
     token_row = (await db.exec(statement)).first()
     if not token_row or token_row.expires_at.replace(tzinfo= timezone.utc) < datetime.now(timezone.utc):
         if token_row:
@@ -94,7 +95,7 @@ async def refresh_access_token(response: Response, db: SessionDep, refresh_token
     db.add(token_row)
     await db.commit()
 
-    new_access_token = create_access_token(token_row.user_id)
+    new_access_token = create_access_token(token_row.user_id, {"firstName": token_row.user.first_name, "lastName": token_row.user.last_name})
 
     response.set_cookie(
         key= "refresh_token",

@@ -1,3 +1,4 @@
+import api, { setLocalToken } from "./services/api";
 import {
   createBrowserRouter,
   Navigate,
@@ -28,6 +29,14 @@ export const router = createBrowserRouter([
       {
         element: <DashboardLayout />,
         ErrorBoundary: RootErrorBoundary,
+        loader: async () => {
+          try {
+            const response = await api.get("/habit/categories");
+            return { categories: response.data };
+          } catch {
+            return { categories: {} };
+          }
+        },
         children: [
           {
             path: "/dashboard",

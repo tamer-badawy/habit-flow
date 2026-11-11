@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext } from "react";
 import { jwtDecode } from "jwt-decode";
-import api from "../services/api";
+import api, { setLocalToken } from "../services/api";
 
 export const AuthContext = createContext();
 
@@ -11,6 +11,8 @@ export const AuthProvider = ({ children }) => {
 
   const handleAuthSuccess = (accessToken) => {
     setToken(accessToken);
+
+    setLocalToken(accessToken);
     const decodedToken = jwtDecode(accessToken);
     setUser({
       id: decodedToken.sub,

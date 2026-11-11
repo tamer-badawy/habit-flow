@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import { Outlet, Link, useNavigate } from "react-router";
+import { Outlet, Link, useNavigate, useLoaderData } from "react-router";
 import HabitModal from "../components/HabitModal";
 import { AuthContext } from "../context/AuthContext";
 import {
@@ -15,6 +15,8 @@ import logo from "../assets/logo.png";
 export default function DashboardLayout() {
   const { logout } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { categories } = useLoaderData();
 
   const sidebarRef = useRef(null);
   const [isOpenSidebar, setIsOpenSidebar] = useState(true);
@@ -144,6 +146,7 @@ export default function DashboardLayout() {
       </div>
       {/* Embedded Component Modal Box Frame */}
       <HabitModal
+        categories={categories}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onAddHabit={handleAddHabit}

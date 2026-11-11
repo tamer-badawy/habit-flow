@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import { X, Sparkles, CheckSquare, Hash } from "lucide-react";
 import { getHabitIcon } from "../utils/icons";
 
-export default function HabitModal({ isOpen, onAddHabit, onClose }) {
+export default function HabitModal({
+  categories,
+  isOpen,
+  onAddHabit,
+  onClose,
+}) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("Health");
   const [isNumeric, setIsNumeric] = useState(false);
@@ -51,6 +56,7 @@ export default function HabitModal({ isOpen, onAddHabit, onClose }) {
       setTargetValue(1);
       setUnit("");
     }
+    console.log(categories);
   }, [isOpen]);
 
   if (!isOpen) return null;
