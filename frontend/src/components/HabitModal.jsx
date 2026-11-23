@@ -1,52 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { X, Sparkles, CheckSquare, Hash } from "lucide-react";
 import { getHabitIcon } from "../utils/icons";
+import { getPredefinedHabits } from "../utils/predefinedHabits";
 
-export default function HabitModal({
-  categories,
-  isOpen,
-  onAddHabit,
-  onClose,
-}) {
+export default function HabitModal({ isOpen, onAddHabit, onClose }) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("Health");
   const [isNumeric, setIsNumeric] = useState(false);
   const [targetValue, setTargetValue] = useState(1);
   const [unit, setUnit] = useState("");
 
-  //Mocking predefined suggestion that will return from Backend
-  const predefinedSuggestions = {
-    Health: [
-      { name: "Go to the Gym", isNumeric: false },
-      { name: "Drink Water", isNumeric: true, target: 8, unit: "glasses" },
-      { name: "Stretch", isNumeric: false },
-      { name: "Sleep 8 Hours", isNumeric: true, target: 8, unit: "hours" },
-      { name: "Run", isNumeric: true, target: 5, unit: "km" },
-    ],
-    Mind: [
-      { name: "Meditate", isNumeric: false },
-      { name: "Read a Book", isNumeric: true, target: 20, unit: "pages" },
-      { name: "Journal", isNumeric: false },
-      { name: "No Screen Time", isNumeric: true, target: 4, unit: "hours" },
-    ],
-    Work: [
-      { name: "Code Python", isNumeric: true, target: 2, unit: "hours" },
-      { name: "Review PRs", isNumeric: false },
-      { name: "Clear Inbox", isNumeric: false },
-      {
-        name: "Study System Design",
-        isNumeric: true,
-        target: 2,
-        unit: "hours",
-      },
-    ],
-    Lifestyle: [
-      { name: "Water Plants", isNumeric: false },
-      { name: "Practice Guitar", isNumeric: true, target: 30, unit: "mins" },
-      { name: "Walk the Dog", isNumeric: true, target: 30, unit: "mins" },
-      { name: "Cook a Meal", isNumeric: false },
-    ],
-  };
+  const predefinedSuggestions = getPredefinedHabits();
 
   useEffect(() => {
     if (!isOpen) {
@@ -56,7 +20,6 @@ export default function HabitModal({
       setTargetValue(1);
       setUnit("");
     }
-    console.log(categories);
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -78,7 +41,7 @@ export default function HabitModal({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name.trim == "") return;
-    onAddHabit({ name, category });
+    onAddHabit({ name, category, isNumeric, targetValue, unit });
     onClose();
   };
 

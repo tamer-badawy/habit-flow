@@ -33,12 +33,16 @@ async def get_user(token: Annotated[str, Depends(_auth_scheme)], db: SessionDep)
                                          headers={"WWW-Authenticate": "Bearer"},
                                          )
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, settings.ALGORITHM)
+        payload = jwt.decode(token, settings.SECRET_KEY, [settings.ALGORITHM], options={"require": ["exp", "sub"]})
         user_id = payload.get("sub")
-        if user_id is None:
+        #safely convert user_id to int so malformed id doesn't cause 500 error
+        try:
+            user_id_int = int(user_id)
+        except (TypeError, ValueError):
             raise credential_exception
         
-        user = await db.get(User,int(user_id))
+        
+        user = await db.get(User,int(user_id_int))
         if user is None:
             raise credential_exception
         if not user.is_active:

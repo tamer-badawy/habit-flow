@@ -4,13 +4,11 @@ import { Flame, Plus, CheckCircle2 } from "lucide-react";
 export default function HabitCard({ habit, onToggle, onToggleLogProgress }) {
   const IconComponent = getHabitIcon(habit.name, habit.category);
 
-  const isCompleted = habit.isNumeric
-    ? habit.currentValue >= habit.targetValue
-    : habit.isCompletedToday;
+  const isCompleted = habit.current_value >= habit.target_value;
 
-  const progressPercentage = habit.isNumeric
-    ? Math.min(100, (habit.currentValue / habit.targetValue) * 100) || 0
-    : habit.isCompletedToday
+  const progressPercentage = habit.is_numeric
+    ? Math.min(100, (habit.current_value / habit.target_value) * 100) || 0
+    : isCompleted
       ? 100
       : 0;
 
@@ -18,7 +16,7 @@ export default function HabitCard({ habit, onToggle, onToggleLogProgress }) {
     <div
       className={`p-6 rounded-2xl border transition-all duration-300
             ${
-              habit.isCompletedToday
+              habit.is_completed
                 ? "bg-emerald-950/40 border-emerald-500/50 shadow-lg shadow-emerald-950/50"
                 : "bg-slate-800/60 border-slate-700/50 hover:border-slate-500"
             }`}
@@ -62,16 +60,16 @@ export default function HabitCard({ habit, onToggle, onToggleLogProgress }) {
           Daily Target Progress
         </p>
         <p className="text-sm font-bold text-white">
-          {habit.isNumeric ? (
+          {habit.is_numeric ? (
             <>
               <span
                 className={isCompleted ? "text-emerald-400" : "text-blue-400"}
               >
-                {habit.currentValue}
+                {habit.current_value}
               </span>
               <span className="text-slate-500">
                 {" "}
-                / {habit.targetValue} {habit.unit}
+                / {habit.target_value} {habit.unit}
               </span>
             </>
           ) : isCompleted ? (
@@ -85,14 +83,14 @@ export default function HabitCard({ habit, onToggle, onToggleLogProgress }) {
       {/* Progressbar */}
       <div className="w-full bg-slate-700 h-2 rounded-full mb-6 overflow-hidden">
         <div
-          className={`h-full transition-all duration-500 ${habit.isCompletedToday ? "bg-emerald-400" : "bg-blue-400"}`}
+          className={`h-full transition-all duration-500 ${isCompleted ? "bg-emerald-400" : "bg-blue-400"}`}
           style={{ width: progressPercentage + "%" }}
         ></div>
       </div>
       {/* ============================================================
           3. CONDITIONAL INTERACTION CONTROLLERS WORKSPACE
          ============================================================ */}
-      {habit.isNumeric ? (
+      {habit.is_numeric ? (
         /* STYLE A: QUANTITATIVE STEPPER WIDGET CONTROLLER BUTTON GRID */
         <div className="flex gap-3">
           <button
@@ -105,7 +103,7 @@ export default function HabitCard({ habit, onToggle, onToggleLogProgress }) {
           >
             {isCompleted ? (
               <>
-                <CheckCircle2 size={16} /> Added Log ({habit.currentValue})
+                <CheckCircle2 size={16} /> Added Log ({habit.current_value})
               </>
             ) : (
               <>

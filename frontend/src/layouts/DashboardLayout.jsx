@@ -1,22 +1,17 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import { Outlet, Link, useNavigate, useLoaderData } from "react-router";
-import HabitModal from "../components/HabitModal";
+import { Outlet, Link, useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthContext";
 import {
   LayoutDashboardIcon,
   ChartNetworkIcon,
   SettingsIcon,
   LogOutIcon,
-  PlusIcon,
 } from "lucide-react";
 import { useOutsideClick } from "../utils/useOutsideClick";
 import logo from "../assets/logo.png";
 
 export default function DashboardLayout() {
   const { logout } = useContext(AuthContext);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const { categories } = useLoaderData();
 
   const sidebarRef = useRef(null);
   const [isOpenSidebar, setIsOpenSidebar] = useState(true);
@@ -29,17 +24,6 @@ export default function DashboardLayout() {
   const handleLogout = async (e) => {
     await logout();
     navigate("/login");
-  };
-
-  const handleAddHabit = (newHabitData) => {
-    const newHabit = {
-      id: habits.length + 1,
-      name: newHabitData.name,
-      category: newHabitData.category,
-      streak: 0,
-      isCompletedToday: false,
-    };
-    setHabits([...habits, newHabit]);
   };
 
   useEffect(() => {
@@ -131,12 +115,6 @@ export default function DashboardLayout() {
               Today's Focus: Friday, October 9, 2026
             </p>
           </div>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-blue-600 hover:bg-blue-500 text-sm md:text-xl text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg shadow-blue-900/30 transition-all flex items-center gap-2"
-          >
-            <PlusIcon /> Add New Habit
-          </button>
         </header>
 
         {/* Main Dashboard Screen Container */}
@@ -144,13 +122,6 @@ export default function DashboardLayout() {
           <Outlet />
         </main>
       </div>
-      {/* Embedded Component Modal Box Frame */}
-      <HabitModal
-        categories={categories}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onAddHabit={handleAddHabit}
-      />
     </div>
   );
 }

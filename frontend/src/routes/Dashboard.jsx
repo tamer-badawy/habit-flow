@@ -1,53 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HabitCard from "../components/HabitCard";
+import HabitModal from "../components/HabitModal";
+
 import NumPadModel from "../components/NumPadModal";
+import { useLoaderData } from "react-router";
+import { PlusIcon } from "lucide-react";
+import api from "../services/api";
 
 export default function Dashboard() {
   const [isNumPadModalOpen, setIsNumPadModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentHabit, setCurrentHabit] = useState(null);
-  const [habits, setHabits] = useState([
-    {
-      id: 1,
-      name: "Morning Exercise",
-      category: "Health",
-      isNumeric: false,
-      streak: 17,
-      isCompletedToday: false,
-    },
-    {
-      id: 2,
-      name: "Read 20 Pages",
-      category: "Mind",
-      isNumeric: true,
-      currentValue: 8,
-      targetValue: 20,
-      unit: "pages",
-      streak: 4,
-      isCompletedToday: false,
-    },
-    {
-      id: 3,
-      name: "Drink 8 Glasses of Water",
-      category: "Health",
-      isNumeric: true,
-      currentValue: 8,
-      targetValue: 8,
-      unit: "glasses",
-      streak: 22,
-      isCompletedToday: true,
-    },
-    {
-      id: 4,
-      name: "Meditation",
-      category: "Mind",
-      isNumeric: false,
-      streak: 0,
-      isCompletedToday: false,
-    },
-  ]);
+  const { initialHabits } = useLoaderData();
+
+  const [habits, setHabits] = useState(initialHabits);
+
+  const handleAddHabit = async (newHabitData) => {
+    const newHabit = {
+      name: newHabitData.name,
+      category: newHabitData.category,
+      is_numeric: newHabitData.isNumeric,
+      target_value: newHabitData.targetValue,
+      unit: newHabitData.unit,
+    };
+    try {
+      const response = await api.post("/habits", newHabit);
+      setHabits(response.data);
+    } catch {}
+  };
 
   const toggleHabit = (id) => {
-    setHabits(
+    /* setHabits(
       habits.map((habit) => {
         if (habit.id === id) {
           const nextState = !habit.isCompletedToday;
@@ -61,7 +44,7 @@ export default function Dashboard() {
         }
         return habit;
       }),
-    );
+    );*/
   };
 
   const handleLogProgress = (value) => {
@@ -89,22 +72,35 @@ export default function Dashboard() {
     setIsNumPadModalOpen(true);
   };
 
+  useEffect(() => {
+    setHabits(initialHabits);
+  }, [initialHabits]);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
       {/* Main Habits Container */}
       <div className="md:col-span-2 space-y-4">
-        <h2 className="text-lg font-bold text-slate-300 mb-2">
-          Today's Habits
-        </h2>
+        <div className="flex justify-between items-center">
+          <h2 className="text-lg font-bold text-slate-300 mb-2">
+            Today's Habits
+          </h2>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-blue-600 hover:bg-blue-500 text-sm text-white px-2 py-2.5 rounded-xl font-semibold shadow-lg shadow-blue-900/30 transition-all flex items-center gap-1"
+          >
+            <PlusIcon /> Add New Habit
+          </button>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {habits.map((habit) => (
-            <HabitCard
-              key={habit.id}
-              habit={habit}
-              onToggle={toggleHabit}
-              onToggleLogProgress={() => handleToggleLogProgress(habit)}
-            />
-          ))}
+          {habits &&
+            habits.map((habit) => (
+              <HabitCard
+                key={habit.id}
+                habit={habit}
+                onToggle={toggleHabit}
+                onToggleLogProgress={() => handleToggleLogProgress(habit)}
+              />
+            ))}
         </div>
       </div>
 
@@ -128,6 +124,11 @@ export default function Dashboard() {
           </p>
         </div>
       </div>
+      <HabitModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAddHabit={handleAddHabit}
+      />
       <NumPadModel
         isOpen={isNumPadModalOpen}
         onClose={() => setIsNumPadModalOpen(false)}

@@ -29,18 +29,19 @@ export const router = createBrowserRouter([
       {
         element: <DashboardLayout />,
         ErrorBoundary: RootErrorBoundary,
-        loader: async () => {
-          try {
-            const response = await api.get("/habit/categories");
-            return { categories: response.data };
-          } catch {
-            return { categories: {} };
-          }
-        },
+
         children: [
           {
             path: "/dashboard",
             element: <Dashboard />,
+            loader: async () => {
+              try {
+                const response = await api.get("/habits");
+                return { initialHabits: response.data };
+              } catch {
+                return { initialHabits: [] };
+              }
+            },
           },
         ],
       },
